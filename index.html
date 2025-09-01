@@ -1,4 +1,38 @@
-<!DOCTYPE html>
+@media (max-width: 480px) {
+            .spectators {
+                display: none;
+            }
+            
+            .game-container {
+                width: 98vw;
+                height: 400px;
+            }
+            
+            .mobile-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
+            
+            .start-screen h1 {
+                font-size: 28px;
+            }
+            
+            .instructions {
+                font-size: 14px;
+            }
+            
+            .character {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .falling-object {
+                width: 25px;
+                height: 25px;
+                font-size: 16px;
+            }
+        }<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -305,10 +339,51 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
+        .mobile-controls {
+            position: fixed;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            display: none;
+            justify-content: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .mobile-btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border: 3px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            user-select: none;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .mobile-btn:active {
+            transform: scale(0.9);
+            background: rgba(255,255,255,0.4);
+        }
+
         @media (max-width: 768px) {
+            .mobile-controls {
+                display: flex;
+            }
+            
+            .controls {
+                display: none;
+            }
+
             .game-wrapper {
                 flex-direction: column;
                 gap: 10px;
+                padding: 10px;
             }
 
             .spectators {
@@ -319,55 +394,58 @@
             }
 
             .spectator {
-                width: 30px;
-                height: 30px;
+                width: 35px;
+                height: 35px;
             }
 
             .game-container {
                 width: 95vw;
-                height: 500px;
+                height: 450px;
             }
             
             .character {
-                width: 40px;
-                height: 40px;
+                width: 45px;
+                height: 45px;
             }
             
             .falling-object {
-                width: 25px;
-                height: 25px;
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
             }
             
             .game-ui {
                 top: 10px;
                 left: 10px;
+                font-size: 16px;
             }
             
             .health-bar {
-                width: 150px;
+                width: 160px;
+                height: 18px;
             }
             
             .game-over h1 {
-                font-size: 36px;
+                font-size: 32px;
             }
             
             .final-score {
-                font-size: 24px;
+                font-size: 20px;
             }
             
             .start-screen h1 {
-                font-size: 36px;
+                font-size: 32px;
             }
             
             .instructions {
-                font-size: 16px;
-                padding: 0 20px;
+                font-size: 15px;
+                padding: 0 15px;
+                max-width: 90vw;
             }
-        }
-
-        @media (max-width: 480px) {
-            .spectators {
-                display: none;
+            
+            .btn {
+                padding: 12px 24px;
+                font-size: 16px;
             }
         }
 
@@ -398,7 +476,7 @@
         <h1>🧬 BioProtocol Survival 🧬</h1>
         <div class="instructions">
             <p><strong>Mission:</strong> Avoid bugs, collect bio capsules and survive!</p>
-            <p><strong>Controls:</strong> A/D keys or ← → arrow keys to move</p>
+            <p><strong>Controls:</strong> A/D keys, ← → arrows, swipe/tap or touch buttons</p>
             <p><strong>Rules:</strong></p>
             <p>• 🐛 Bugs = -8 health</p>
             <p>• 💊 Bio capsules = +5 health (rare!)</p>
@@ -488,6 +566,11 @@
         </div>
     </div>
 
+    <div class="mobile-controls" id="mobileControls">
+        <div class="mobile-btn" id="leftBtn">←</div>
+        <div class="mobile-btn" id="rightBtn">→</div>
+    </div>
+
     <div class="footer">
         Created by <a href="https://twitter.com/0xAybars" target="_blank">@0xAybars</a> & <a href="https://x.com/0xDragonHash" target="_blank">@0xDragonHash</a> / EarlyX with ❤️ for the BioProtocol Community
     </div>
@@ -521,6 +604,10 @@
 
         // Karakter kontrolleri
         let keys = {};
+        let mobileControls = {
+            left: false,
+            right: false
+        };
 
         document.addEventListener('keydown', (e) => {
             keys[e.key.toLowerCase()] = true;
@@ -530,15 +617,67 @@
             keys[e.key.toLowerCase()] = false;
         });
 
+        // Mobile control buttons
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+
+        // Touch events for mobile buttons
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            mobileControls.left = true;
+        });
+
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            mobileControls.left = false;
+        });
+
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            mobileControls.right = true;
+        });
+
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            mobileControls.right = false;
+        });
+
+        // Mouse events for mobile buttons (for desktop testing)
+        leftBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            mobileControls.left = true;
+        });
+
+        leftBtn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            mobileControls.left = false;
+        });
+
+        rightBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            mobileControls.right = true;
+        });
+
+        rightBtn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            mobileControls.right = false;
+        });
+
+        // Prevent context menu and selection
+        leftBtn.addEventListener('contextmenu', (e) => e.preventDefault());
+        rightBtn.addEventListener('contextmenu', (e) => e.preventDefault());
+        leftBtn.addEventListener('selectstart', (e) => e.preventDefault());
+        rightBtn.addEventListener('selectstart', (e) => e.preventDefault());
+
         function moveCharacter() {
             if (!gameState.isPlaying) return;
 
-            let moveSpeed = 3;
+            let moveSpeed = 4; // Slightly faster for mobile
             
-            if (keys['a'] || keys['arrowleft']) {
+            if (keys['a'] || keys['arrowleft'] || mobileControls.left) {
                 gameState.characterPosition = Math.max(5, gameState.characterPosition - moveSpeed);
             }
-            if (keys['d'] || keys['arrowright']) {
+            if (keys['d'] || keys['arrowright'] || mobileControls.right) {
                 gameState.characterPosition = Math.min(95, gameState.characterPosition + moveSpeed);
             }
 
@@ -722,33 +861,70 @@
             window.open(twitterUrl, '_blank');
         }
 
-        // Mobil dokunmatik kontroller
+        // Mobile swipe controls (improved)
         let touchStartX = 0;
+        let touchStartY = 0;
         let touchEndX = 0;
+        let touchEndY = 0;
+        let isSwipeMoving = false;
 
-        gameContainer.addEventListener('touchstart', (e) => {
+        document.addEventListener('touchstart', (e) => {
+            if (!gameState.isPlaying) return;
             touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            isSwipeMoving = false;
         });
 
-        gameContainer.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
+        document.addEventListener('touchmove', (e) => {
+            if (!gameState.isPlaying) return;
+            e.preventDefault(); // Prevent scrolling
             
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Sol kaydırma
-                    gameState.characterPosition = Math.max(5, gameState.characterPosition - 10);
+            const currentX = e.changedTouches[0].screenX;
+            const diffX = currentX - touchStartX;
+            const diffY = Math.abs(e.changedTouches[0].screenY - touchStartY);
+            
+            // Only move if horizontal swipe is more dominant than vertical
+            if (Math.abs(diffX) > diffY && Math.abs(diffX) > 10) {
+                isSwipeMoving = true;
+                if (diffX > 0) {
+                    mobileControls.right = true;
+                    mobileControls.left = false;
                 } else {
-                    // Sağ kaydırma
-                    gameState.characterPosition = Math.min(95, gameState.characterPosition + 10);
+                    mobileControls.left = true;
+                    mobileControls.right = false;
                 }
-                character.style.left = gameState.characterPosition + '%';
             }
+        });
+
+        document.addEventListener('touchend', (e) => {
+            if (!gameState.isPlaying) return;
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            
+            // Stop movement
+            mobileControls.left = false;
+            mobileControls.right = false;
+            
+            // Handle tap for quick movement
+            if (!isSwipeMoving) {
+                handleTap();
+            }
+            
+            isSwipeMoving = false;
+        });
+
+        function handleTap() {
+            const screenWidth = window.innerWidth;
+            const tapX = touchEndX;
+            
+            if (tapX < screenWidth / 2) {
+                // Left tap
+                gameState.characterPosition = Math.max(5, gameState.characterPosition - 15);
+            } else {
+                // Right tap  
+                gameState.characterPosition = Math.min(95, gameState.characterPosition + 15);
+            }
+            character.style.left = gameState.characterPosition + '%';
         }
 
         // Sayfa yüklendiğinde oyunu başlat
