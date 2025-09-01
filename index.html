@@ -400,9 +400,9 @@
             <p><strong>Mission:</strong> Avoid bugs, collect bio capsules and survive!</p>
             <p><strong>Controls:</strong> A/D keys or ← → arrow keys to move</p>
             <p><strong>Rules:</strong></p>
-            <p>• 🐛 Bugs = -5 health</p>
-            <p>• 💊 Bio capsules = +7 health</p>
-            <p>• Every second = -1 health</p>
+            <p>• 🐛 Bugs = -8 health</p>
+            <p>• 💊 Bio capsules = +5 health (rare!)</p>
+            <p>• Health decay increases over time</p>
         </div>
         <button class="start-btn" onclick="startGame()">Start Game</button>
     </div>
@@ -548,13 +548,13 @@
         function createFallingObject() {
             if (!gameState.isPlaying) return;
 
-            const isBio = Math.random() < 0.3; // 30% şans bio kapsülü
+            const isBio = Math.random() < 0.2; // 20% chance for bio capsule (reduced from 30%)
             const obj = document.createElement('div');
             obj.className = `falling-object ${isBio ? 'bio' : 'bug'}`;
             obj.style.left = Math.random() * 90 + '%';
             obj.style.top = '-30px';
             obj.dataset.type = isBio ? 'bio' : 'bug';
-            obj.dataset.speed = (Math.random() * 2 + 1).toString();
+            obj.dataset.speed = (Math.random() * 3 + 2).toString(); // Faster objects (2-5 instead of 1-3)
             
             gameContainer.appendChild(obj);
             gameState.fallingObjects.push(obj);
@@ -580,11 +580,11 @@
                     objRect.bottom > charRect.top) {
                     
                     if (obj.dataset.type === 'bio') {
-                        gameState.health = Math.min(100, gameState.health + 7);
-                        gameState.score += 10;
+                        gameState.health = Math.min(100, gameState.health + 5); // Reduced from +7 to +5
+                        gameState.score += 15; // Increased from 10 to 15 (more reward for rare bio)
                         createParticles(objRect.left, objRect.top, '#2ecc71');
                     } else {
-                        gameState.health = Math.max(0, gameState.health - 5);
+                        gameState.health = Math.max(0, gameState.health - 8); // Increased from -5 to -8
                         createParticles(objRect.left, objRect.top, '#ff4757');
                     }
                     
@@ -637,13 +637,13 @@
             updateFallingObjects();
             updateUI();
             
-            // Increase game speed over time (more dramatic)
-            gameState.gameSpeed = 1 + (gameState.time / 30) * 1.2;
+            // Increase game speed over time (more aggressive)
+            gameState.gameSpeed = 1 + (gameState.time / 20) * 1.8; // Faster acceleration
             
-            // Increase spawn rate over time
-            if (gameState.time > 0 && gameState.time % 10 === 0) {
+            // Increase spawn rate over time (more frequent)
+            if (gameState.time > 0 && gameState.time % 8 === 0) { // Every 8 seconds instead of 10
                 clearInterval(gameIntervals.objectSpawner);
-                const newSpawnRate = Math.max(800, 1500 - (gameState.time * 20));
+                const newSpawnRate = Math.max(600, 1200 - (gameState.time * 25)); // Faster spawn, minimum 600ms
                 gameIntervals.objectSpawner = setInterval(createFallingObject, newSpawnRate);
             }
             
@@ -657,14 +657,15 @@
             startScreen.style.display = 'none';
             gameState.isPlaying = true;
             
-            // Intervalları başlat
+            // Health decay - gets faster over time
             gameIntervals.healthDecay = setInterval(() => {
                 if (gameState.isPlaying) {
-                    gameState.health = Math.max(0, gameState.health - 1);
+                    const decayRate = Math.min(7, 1 + Math.floor(gameState.time / 30)); // 1 HP/sec initially, up to 7 HP/sec
+                    gameState.health = Math.max(0, gameState.health - decayRate);
                 }
             }, 1000);
             
-            gameIntervals.objectSpawner = setInterval(createFallingObject, 1500);
+            gameIntervals.objectSpawner = setInterval(createFallingObject, 1200); // Faster initial spawn (1.2s instead of 1.5s)
             gameIntervals.gameLoop = setInterval(gameLoop, 16); // ~60 FPS
             
             gameIntervals.timer = setInterval(() => {
@@ -713,7 +714,9 @@
         }
 
         function shareOnTwitter() {
-            const text = `🧬 I scored ${gameState.score} points and survived ${gameState.time} seconds in BioProtocol Survival! Try it yourself: 🐛💊`;
+            const text = `🧬 I scored ${gameState.score} points and survived ${gameState.time} seconds in BioProtocol Survival! Try it yourself: 🐛💊
+
+#BioProtocol`;
             const url = window.location.href;
             const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
             window.open(twitterUrl, '_blank');
