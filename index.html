@@ -55,60 +55,12 @@
             align-items: center;
         }
 
-        .game-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin: 20px auto;
-        }
-
-        .spectators {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .spectator {
-            width: 40px;
-            height: 40px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-        }
-
-        .spectator:hover {
-            transform: scale(1.2);
-            border-color: #1DA1F2;
-            box-shadow: 0 0 15px rgba(29, 161, 242, 0.5);
-        }
-
-        .spectators.left .spectator[data-twitter="1"] { background-image: url('1.png'); }
-        .spectators.left .spectator[data-twitter="2"] { background-image: url('2.png'); }
-        .spectators.left .spectator[data-twitter="3"] { background-image: url('3.png'); }
-        .spectators.left .spectator[data-twitter="4"] { background-image: url('4.png'); }
-        .spectators.left .spectator[data-twitter="5"] { background-image: url('5.png'); }
-        .spectators.left .spectator[data-twitter="6"] { background-image: url('6.png'); }
-        .spectators.left .spectator[data-twitter="7"] { background-image: url('7.png'); }
-
-        .spectators.right .spectator[data-twitter="8"] { background-image: url('8.png'); }
-        .spectators.right .spectator[data-twitter="9"] { background-image: url('9.png'); }
-        .spectators.right .spectator[data-twitter="10"] { background-image: url('10.png'); }
-        .spectators.right .spectator[data-twitter="11"] { background-image: url('11.png'); }
-        .spectators.right .spectator[data-twitter="12"] { background-image: url('12.png'); }
-        .spectators.right .spectator[data-twitter="13"] { background-image: url('13.png'); }
-        .spectators.right .spectator[data-twitter="14"] { background-image: url('14.png'); }
-
         .game-container {
             position: relative;
             width: 80vw;
             max-width: 800px;
             height: 600px;
+            margin: 20px auto;
             overflow: hidden;
             background: linear-gradient(180deg, #87CEEB 0%, #98FB98 50%, #90EE90 100%);
             border-radius: 15px;
@@ -485,76 +437,20 @@
         <button class="start-btn" onclick="startGame()">Start Game</button>
     </div>
 
-    <!-- 
-    Twitter Accounts Configuration:
-    Replace "#" with actual Twitter URLs for each spectator:
-    
-    Spectator 1 (1.png): https://twitter.com/username1
-    Spectator 2 (2.png): https://twitter.com/username2
-    Spectator 3 (3.png): https://twitter.com/username3
-    Spectator 4 (4.png): https://twitter.com/username4
-    Spectator 5 (5.png): https://twitter.com/username5
-    Spectator 6 (6.png): https://twitter.com/username6
-    Spectator 7 (7.png): https://twitter.com/username7
-    Spectator 8 (8.png): https://twitter.com/username8
-    Spectator 9 (9.png): https://twitter.com/username9
-    Spectator 10 (10.png): https://twitter.com/username10
-    Spectator 11 (11.png): https://twitter.com/username11
-    Spectator 12 (12.png): https://twitter.com/username12
-    Spectator 13 (13.png): https://twitter.com/username13
-    Spectator 14 (14.png): https://twitter.com/username14
-    -->
-    
-    <div class="game-wrapper">
-        <div class="spectators left">
-            <!-- Spectator 1 - 1.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="1" title="Spectator 1"></a>
-            <!-- Spectator 2 - 2.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="2" title="Spectator 2"></a>
-            <!-- Spectator 3 - 3.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="3" title="Spectator 3"></a>
-            <!-- Spectator 4 - 4.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="4" title="Spectator 4"></a>
-            <!-- Spectator 5 - 5.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="5" title="Spectator 5"></a>
-            <!-- Spectator 6 - 6.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="6" title="Spectator 6"></a>
-            <!-- Spectator 7 - 7.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="7" title="Spectator 7"></a>
-        </div>
-
-        <div class="game-container" id="gameContainer">
-            <div class="game-ui">
-                <div class="health-bar">
-                    <div class="health-fill" id="healthFill"></div>
-                </div>
-                <div class="score">Score: <span id="scoreDisplay">0</span></div>
-                <div class="time">Time: <span id="timeDisplay">0</span>s</div>
+    <div class="game-container" id="gameContainer">
+        <div class="game-ui">
+            <div class="health-bar">
+                <div class="health-fill" id="healthFill"></div>
             </div>
-
-            <div class="controls">
-                Controls: A/D or ← →
-            </div>
-
-            <div class="character" id="character"></div>
+            <div class="score">Score: <span id="scoreDisplay">0</span></div>
+            <div class="time">Time: <span id="timeDisplay">0</span>s</div>
         </div>
 
-        <div class="spectators right">
-            <!-- Spectator 8 - 8.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="8" title="Spectator 8"></a>
-            <!-- Spectator 9 - 9.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="9" title="Spectator 9"></a>
-            <!-- Spectator 10 - 10.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="10" title="Spectator 10"></a>
-            <!-- Spectator 11 - 11.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="11" title="Spectator 11"></a>
-            <!-- Spectator 12 - 12.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="12" title="Spectator 12"></a>
-            <!-- Spectator 13 - 13.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="13" title="Spectator 13"></a>
-            <!-- Spectator 14 - 14.png -->
-            <a href="#" class="spectator" target="_blank" data-twitter="14" title="Spectator 14"></a>
+        <div class="controls">
+            Controls: A/D or ← →
         </div>
+
+        <div class="character" id="character"></div>
     </div>
 
     <div class="game-over" id="gameOver">
